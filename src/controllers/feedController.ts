@@ -18,12 +18,14 @@ export const getFeed = asyncHandler(async (req: Request, res: Response) => {
     userId: req.user.userId,
     tab,
     page,
-    limit
+    limit,
   });
 
   res.json(feed);
 });
 
-export const getCategories = asyncHandler(async (_req: Request, res: Response) => {
-  res.json({ categories: availableTopics });
-});
+export const getCategories = asyncHandler(
+  async (_req: Request, res: Response) => {
+    res.json({ categories: availableTopics });
+  },
+);

@@ -25,8 +25,9 @@ export const getAuthSetupStatus = async () => {
   return {
     hasAdmin: adminCount > 0,
     canRegisterAdmin: adminCount === 0,
-    registerRoles: adminCount === 0 ? (["user", "admin"] as const) : (["user"] as const),
-    loginRoles: ["user", "admin"] as const
+    registerRoles:
+      adminCount === 0 ? (["user", "admin"] as const) : (["user"] as const),
+    loginRoles: ["user", "admin"] as const,
   };
 };
 
@@ -34,7 +35,7 @@ export const registerUser = async ({
   name,
   email,
   password,
-  role
+  role,
 }: AuthInput & {
   name: string;
   role: "admin" | "user";
@@ -48,7 +49,10 @@ export const registerUser = async ({
   if (role === "admin") {
     const existingAdmin = await User.findOne({ role: "admin" });
     if (existingAdmin) {
-      throw new HttpError(409, "An admin account already exists. New registrations can only be readers now.");
+      throw new HttpError(
+        409,
+        "An admin account already exists. New registrations can only be readers now.",
+      );
     }
   }
 
@@ -59,7 +63,8 @@ export const registerUser = async ({
     passwordHash,
     role,
     onboardingCompleted: role === "admin",
-    preferences: role === "admin" ? ["General", "World", "Technology", "Business"] : []
+    preferences:
+      role === "admin" ? ["General", "World", "Technology", "Business"] : [],
   });
 
   const userJson = user.toJSON() as SafeUserRecord;
@@ -68,13 +73,17 @@ export const registerUser = async ({
     token: signToken({
       userId: user.id,
       role: user.role as "admin" | "user",
-      email: user.email as string
+      email: user.email as string,
     }),
-    user: sanitizeUser(userJson)
+    user: sanitizeUser(userJson),
   };
 };
 
-export const loginUser = async ({ email, password, role }: AuthInput & { role?: "admin" | "user" }) => {
+export const loginUser = async ({
+  email,
+  password,
+  role,
+}: AuthInput & { role?: "admin" | "user" }) => {
   const user = await User.findOne({ email: email.toLowerCase() });
 
   if (!user) {
@@ -87,7 +96,10 @@ export const loginUser = async ({ email, password, role }: AuthInput & { role?: 
   }
 
   if (role && user.role !== role) {
-    throw new HttpError(403, `This account is registered as a ${user.role}, not a ${role}.`);
+    throw new HttpError(
+      403,
+      `This account is registered as a ${user.role}, not a ${role}.`,
+    );
   }
 
   const userJson = user.toJSON() as SafeUserRecord;
@@ -96,8 +108,8 @@ export const loginUser = async ({ email, password, role }: AuthInput & { role?: 
     token: signToken({
       userId: user.id,
       role: user.role as "admin" | "user",
-      email: user.email as string
+      email: user.email as string,
     }),
-    user: sanitizeUser(userJson)
+    user: sanitizeUser(userJson),
   };
 };

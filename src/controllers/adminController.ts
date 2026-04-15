@@ -18,7 +18,11 @@ export const createAgent = asyncHandler(async (req: Request, res: Response) => {
 });
 
 export const updateAgent = asyncHandler(async (req: Request, res: Response) => {
-  const agent = await FeedAgent.findByIdAndUpdate(String(req.params.id), req.body, { new: true });
+  const agent = await FeedAgent.findByIdAndUpdate(
+    String(req.params.id),
+    req.body,
+    { new: true },
+  );
   if (!agent) {
     throw new HttpError(404, "Feed agent not found.");
   }
@@ -56,7 +60,11 @@ export const createAd = asyncHandler(async (req: Request, res: Response) => {
 });
 
 export const updateAd = asyncHandler(async (req: Request, res: Response) => {
-  const ad = await AdCampaign.findByIdAndUpdate(String(req.params.id), req.body, { new: true });
+  const ad = await AdCampaign.findByIdAndUpdate(
+    String(req.params.id),
+    req.body,
+    { new: true },
+  );
   if (!ad) {
     throw new HttpError(404, "Ad campaign not found.");
   }
@@ -73,7 +81,9 @@ export const deleteAd = asyncHandler(async (req: Request, res: Response) => {
   res.json({ message: "Ad campaign deleted successfully." });
 });
 
-export const getAnalytics = asyncHandler(async (_req: Request, res: Response) => {
-  const analytics = await getAdAnalytics();
-  res.json({ analytics });
-});
+export const getAnalytics = asyncHandler(
+  async (_req: Request, res: Response) => {
+    const analytics = await getAdAnalytics();
+    res.json({ analytics });
+  },
+);

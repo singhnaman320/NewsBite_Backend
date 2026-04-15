@@ -5,30 +5,32 @@ const adEventSchema = new Schema(
     adId: {
       type: Schema.Types.ObjectId,
       ref: "AdCampaign",
-      required: true
+      required: true,
     },
     userId: {
       type: Schema.Types.ObjectId,
       ref: "User",
-      required: true
+      required: true,
     },
     articleId: {
       type: Schema.Types.ObjectId,
-      ref: "Article"
+      ref: "Article",
     },
     eventType: {
       type: String,
       enum: ["view", "click"],
-      required: true
-    }
+      required: true,
+    },
   },
   {
-    timestamps: true
-  }
+    timestamps: true,
+  },
 );
 
 adEventSchema.index({ adId: 1, userId: 1, eventType: 1 });
 adEventSchema.index({ createdAt: -1 });
 
-export type AdEventDocument = InferSchemaType<typeof adEventSchema> & { _id: Schema.Types.ObjectId };
+export type AdEventDocument = InferSchemaType<typeof adEventSchema> & {
+  _id: Schema.Types.ObjectId;
+};
 export const AdEvent = model("AdEvent", adEventSchema);

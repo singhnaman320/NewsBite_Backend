@@ -13,5 +13,5 @@ export const env = {
   mongoUri: process.env.MONGODB_URI ?? "mongodb://127.0.0.1:27017/newsbite",
   jwtSecret: process.env.JWT_SECRET ?? "replace-with-a-long-random-secret",
   jwtExpiresIn: process.env.JWT_EXPIRES_IN ?? "7d",
-  clientUrl: process.env.CLIENT_URL ?? "http://localhost:5173"
+  clientUrl: process.env.CLIENT_URL ?? "http://localhost:5173",
 };

@@ -29,7 +29,7 @@ export const recordView = asyncHandler(async (req: Request, res: Response) => {
   const existingView = await AdEvent.findOne({
     adId,
     userId: req.user.userId,
-    eventType: "view"
+    eventType: "view",
   });
 
   if (!existingView) {
@@ -37,7 +37,7 @@ export const recordView = asyncHandler(async (req: Request, res: Response) => {
       adId,
       articleId,
       userId: req.user.userId,
-      eventType: "view"
+      eventType: "view",
     });
   }
 
@@ -56,7 +56,7 @@ export const recordClick = asyncHandler(async (req: Request, res: Response) => {
     adId,
     articleId,
     userId: req.user.userId,
-    eventType: "click"
+    eventType: "click",
   });
 
   res.status(201).json({ tracked: true });

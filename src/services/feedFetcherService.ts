@@ -24,7 +24,8 @@ const parser = new Parser<Record<string, never>, ParsedItem>();
 const extractImageUrl = (item: ParsedItem) => item.enclosure?.url;
 
 const formatFeedErrorMessage = (sourceName: string, error: unknown) => {
-  const rawMessage = error instanceof Error ? error.message : "Unknown feed fetch error.";
+  const rawMessage =
+    error instanceof Error ? error.message : "Unknown feed fetch error.";
 
   if (/status code\s*503/i.test(rawMessage)) {
     return `${sourceName} is temporarily unavailable right now. Please try again in a few minutes.`;
@@ -56,7 +57,8 @@ export const syncAgentFeed = async (agentId: string) => {
         continue;
       }
 
-      const sourceKey = item.link ?? item.guid ?? `${agent.sourceName}:${item.title}`;
+      const sourceKey =
+        item.link ?? item.guid ?? `${agent.sourceName}:${item.title}`;
       const link = item.link ?? sourceKey;
 
       await Article.findOneAndUpdate(
@@ -74,10 +76,10 @@ export const syncAgentFeed = async (agentId: string) => {
             category: agent.category,
             imageUrl: extractImageUrl(item),
             author: item.creator ?? item.author,
-            agentId: agent._id
-          }
+            agentId: agent._id,
+          },
         },
-        { upsert: true }
+        { upsert: true },
       );
 
       imported += 1;
@@ -91,10 +93,13 @@ export const syncAgentFeed = async (agentId: string) => {
     return {
       imported,
       skipped: false,
-      message: `Feed sync completed for ${agent.sourceName}. Imported ${imported} article records.`
+      message: `Feed sync completed for ${agent.sourceName}. Imported ${imported} article records.`,
     };
   } catch (error) {
-    const formattedErrorMessage = formatFeedErrorMessage(agent.sourceName, error);
+    const formattedErrorMessage = formatFeedErrorMessage(
+      agent.sourceName,
+      error,
+    );
     agent.lastErrorAt = new Date();
     agent.lastErrorMessage = formattedErrorMessage;
     await agent.save();
@@ -110,7 +115,8 @@ export const syncDueFeeds = async () => {
       return true;
     }
 
-    const nextRunAt = agent.lastFetchedAt.getTime() + agent.fetchIntervalMinutes * 60000;
+    const nextRunAt =
+      agent.lastFetchedAt.getTime() + agent.fetchIntervalMinutes * 60000;
     return nextRunAt <= now;
   });
 

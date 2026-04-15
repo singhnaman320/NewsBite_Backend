@@ -1,7 +1,11 @@
 ﻿import { Request, Response } from "express";
 
 import { User } from "../models/User";
-import { getAuthSetupStatus, loginUser, registerUser } from "../services/authService";
+import {
+  getAuthSetupStatus,
+  loginUser,
+  registerUser,
+} from "../services/authService";
 import { asyncHandler } from "../utils/asyncHandler";
 import { HttpError } from "../utils/httpError";
 
@@ -18,7 +22,13 @@ export const register = asyncHandler(async (req: Request, res: Response) => {
   }
 
   const result = await registerUser({ name, email, password, role });
-  res.status(201).json({ ...result, message: "Registration completed successfully. Please log in to continue." });
+  res
+    .status(201)
+    .json({
+      ...result,
+      message:
+        "Registration completed successfully. Please log in to continue.",
+    });
 });
 
 export const login = asyncHandler(async (req: Request, res: Response) => {
@@ -36,10 +46,12 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
   res.json({ ...result, message: "Login successful." });
 });
 
-export const getSetupStatus = asyncHandler(async (_req: Request, res: Response) => {
-  const status = await getAuthSetupStatus();
-  res.json(status);
-});
+export const getSetupStatus = asyncHandler(
+  async (_req: Request, res: Response) => {
+    const status = await getAuthSetupStatus();
+    res.json(status);
+  },
+);
 
 export const me = asyncHandler(async (req: Request, res: Response) => {
   if (!req.user) {

@@ -5,48 +5,50 @@ const feedAgentSchema = new Schema(
     sourceName: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
     },
     topic: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
     },
     category: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
     },
     rssUrl: {
       type: String,
       required: true,
       unique: true,
-      trim: true
+      trim: true,
     },
     description: {
       type: String,
-      required: true
+      required: true,
     },
     fetchIntervalMinutes: {
       type: Number,
       required: true,
       min: 5,
-      default: 15
+      default: 15,
     },
     isActive: {
       type: Boolean,
-      default: true
+      default: true,
     },
     lastFetchedAt: Date,
     lastErrorAt: Date,
-    lastErrorMessage: String
+    lastErrorMessage: String,
   },
   {
-    timestamps: true
-  }
+    timestamps: true,
+  },
 );
 
 feedAgentSchema.index({ topic: 1, isActive: 1 });
 
-export type FeedAgentDocument = InferSchemaType<typeof feedAgentSchema> & { _id: Schema.Types.ObjectId };
+export type FeedAgentDocument = InferSchemaType<typeof feedAgentSchema> & {
+  _id: Schema.Types.ObjectId;
+};
 export const FeedAgent = model("FeedAgent", feedAgentSchema);

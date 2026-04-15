@@ -3,7 +3,11 @@
 import { HttpError } from "../utils/httpError";
 import { verifyToken } from "../utils/jwt";
 
-export const authenticate = (req: Request, _res: Response, next: NextFunction) => {
+export const authenticate = (
+  req: Request,
+  _res: Response,
+  next: NextFunction,
+) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader?.startsWith("Bearer ")) {
@@ -20,13 +24,16 @@ export const authenticate = (req: Request, _res: Response, next: NextFunction) =
 };
 
 export const requireRole =
-  (role: "admin" | "user") => (req: Request, _res: Response, next: NextFunction) => {
+  (role: "admin" | "user") =>
+  (req: Request, _res: Response, next: NextFunction) => {
     if (!req.user) {
       return next(new HttpError(401, "Authentication required."));
     }
 
     if (req.user.role !== role) {
-      return next(new HttpError(403, "You do not have access to this resource."));
+      return next(
+        new HttpError(403, "You do not have access to this resource."),
+      );
     }
 
     return next();

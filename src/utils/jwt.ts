@@ -10,10 +10,11 @@ export type JwtPayload = {
 
 export const signToken = (payload: JwtPayload) => {
   const options: SignOptions = {
-    expiresIn: env.jwtExpiresIn as SignOptions["expiresIn"]
+    expiresIn: env.jwtExpiresIn as SignOptions["expiresIn"],
   };
 
   return jwt.sign(payload, env.jwtSecret as Secret, options);
 };
 
-export const verifyToken = (token: string) => jwt.verify(token, env.jwtSecret as Secret) as JwtPayload;
+export const verifyToken = (token: string) =>
+  jwt.verify(token, env.jwtSecret as Secret) as JwtPayload;

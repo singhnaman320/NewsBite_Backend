@@ -5,38 +5,38 @@ const userSchema = new Schema(
     name: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
     },
     email: {
       type: String,
       required: true,
       unique: true,
       lowercase: true,
-      trim: true
+      trim: true,
     },
     passwordHash: {
       type: String,
-      required: true
+      required: true,
     },
     role: {
       type: String,
       enum: ["admin", "user"],
-      default: "user"
+      default: "user",
     },
     preferences: {
       type: [String],
-      default: []
+      default: [],
     },
     onboardingCompleted: {
       type: Boolean,
-      default: false
+      default: false,
     },
     savedArticles: [
       {
         type: Schema.Types.ObjectId,
-        ref: "Article"
-      }
-    ]
+        ref: "Article",
+      },
+    ],
   },
   {
     timestamps: true,
@@ -44,10 +44,12 @@ const userSchema = new Schema(
       transform: (_doc, ret: { passwordHash?: string }) => {
         Reflect.deleteProperty(ret, "passwordHash");
         return ret;
-      }
-    }
-  }
+      },
+    },
+  },
 );
 
-export type UserDocument = InferSchemaType<typeof userSchema> & { _id: Schema.Types.ObjectId };
+export type UserDocument = InferSchemaType<typeof userSchema> & {
+  _id: Schema.Types.ObjectId;
+};
 export const User = model("User", userSchema);

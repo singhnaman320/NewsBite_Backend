@@ -1,6 +1,10 @@
 ﻿import { Router } from "express";
 
-import { getSavedArticles, toggleSavedArticle, updatePreferences } from "../controllers/userController";
+import {
+  getSavedArticles,
+  toggleSavedArticle,
+  updatePreferences,
+} from "../controllers/userController";
 import { authenticate } from "../middleware/auth";
 
 const router = Router();

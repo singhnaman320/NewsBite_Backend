@@ -21,7 +21,12 @@ export const getSavedArticles = async (userId: string) => {
   return Article.find({ _id: { $in: savedIds } }).sort({ publishedAt: -1 });
 };
 
-export const getFeedBundle = async ({ userId, tab, page, limit }: FeedQuery) => {
+export const getFeedBundle = async ({
+  userId,
+  tab,
+  page,
+  limit,
+}: FeedQuery) => {
   const user = await User.findById(userId);
   if (!user) {
     return {
@@ -30,7 +35,7 @@ export const getFeedBundle = async ({ userId, tab, page, limit }: FeedQuery) => 
       hasMore: false,
       totalItems: 0,
       totalPages: 0,
-      tabs: []
+      tabs: [],
     };
   }
 
@@ -53,20 +58,22 @@ export const getFeedBundle = async ({ userId, tab, page, limit }: FeedQuery) => 
     return {
       items: pageArticles.map((article) => ({
         kind: "article" as const,
-        article
+        article,
       })),
       page: safePage,
       hasMore,
       totalItems,
       totalPages,
-      tabs
+      tabs,
     };
   }
 
   const filter: FilterQuery<(typeof Article)["schema"]> = {};
 
   if (tab === "For You") {
-    filter.topic = { $in: user.preferences.length > 0 ? user.preferences : fallbackTopics };
+    filter.topic = {
+      $in: user.preferences.length > 0 ? user.preferences : fallbackTopics,
+    };
   } else if (tab) {
     filter.topic = tab;
   }
@@ -74,15 +81,19 @@ export const getFeedBundle = async ({ userId, tab, page, limit }: FeedQuery) => 
   const skip = (safePage - 1) * safeLimit;
   const totalItems = await Article.countDocuments(filter);
   const totalPages = totalItems > 0 ? Math.ceil(totalItems / safeLimit) : 1;
-  const articles = await Article.find(filter).sort({ publishedAt: -1 }).skip(skip).limit(safeLimit + 1);
+  const articles = await Article.find(filter)
+    .sort({ publishedAt: -1 })
+    .skip(skip)
+    .limit(safeLimit + 1);
   const hasMore = articles.length > safeLimit;
   const pageArticles = hasMore ? articles.slice(0, safeLimit) : articles;
 
-  const matchingTopics = tab === "For You" ? user.preferences : tab ? [tab] : user.preferences;
+  const matchingTopics =
+    tab === "For You" ? user.preferences : tab ? [tab] : user.preferences;
 
   const ads = await AdCampaign.find({
     isActive: true,
-    $or: [{ topics: { $size: 0 } }, { topics: { $in: matchingTopics } }]
+    $or: [{ topics: { $size: 0 } }, { topics: { $in: matchingTopics } }],
   }).limit(Math.max(1, Math.ceil(pageArticles.length / adStride)));
 
   const items: Array<
@@ -100,7 +111,7 @@ export const getFeedBundle = async ({ userId, tab, page, limit }: FeedQuery) => 
       items.push({
         kind: "ad",
         ad: ads[adIndex],
-        placementIndex: index + 1
+        placementIndex: index + 1,
       });
     }
   });
@@ -111,6 +122,6 @@ export const getFeedBundle = async ({ userId, tab, page, limit }: FeedQuery) => 
     hasMore,
     totalItems,
     totalPages,
-    tabs
+    tabs,
   };
 };

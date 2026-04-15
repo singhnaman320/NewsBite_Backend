@@ -5,39 +5,41 @@ const adCampaignSchema = new Schema(
     title: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
     },
     imageUrl: {
       type: String,
-      required: true
+      required: true,
     },
     targetLink: {
       type: String,
-      required: true
+      required: true,
     },
     description: {
       type: String,
-      default: ""
+      default: "",
     },
     ctaLabel: {
       type: String,
-      default: "Learn more"
+      default: "Learn more",
     },
     topics: {
       type: [String],
-      default: []
+      default: [],
     },
     isActive: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   {
-    timestamps: true
-  }
+    timestamps: true,
+  },
 );
 
 adCampaignSchema.index({ isActive: 1, topics: 1 });
 
-export type AdCampaignDocument = InferSchemaType<typeof adCampaignSchema> & { _id: Schema.Types.ObjectId };
+export type AdCampaignDocument = InferSchemaType<typeof adCampaignSchema> & {
+  _id: Schema.Types.ObjectId;
+};
 export const AdCampaign = model("AdCampaign", adCampaignSchema);

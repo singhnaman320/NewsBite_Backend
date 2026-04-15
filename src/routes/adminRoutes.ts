@@ -10,7 +10,7 @@ import {
   listAgents,
   runAgent,
   updateAd,
-  updateAgent
+  updateAgent,
 } from "../controllers/adminController";
 import { authenticate, requireRole } from "../middleware/auth";
 

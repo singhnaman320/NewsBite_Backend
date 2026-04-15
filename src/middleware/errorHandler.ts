@@ -4,7 +4,12 @@ import mongoose from "mongoose";
 import { env } from "../config/env";
 import { HttpError } from "../utils/httpError";
 
-export const errorHandler = (error: Error, _req: Request, res: Response, _next: NextFunction) => {
+export const errorHandler = (
+  error: Error,
+  _req: Request,
+  res: Response,
+  _next: NextFunction,
+) => {
   if (error instanceof HttpError) {
     return res.status(error.statusCode).json({ message: error.message });
   }
@@ -14,7 +19,9 @@ export const errorHandler = (error: Error, _req: Request, res: Response, _next: 
   }
 
   if ((error as { code?: number }).code === 11000) {
-    return res.status(409).json({ message: "A unique constraint was violated." });
+    return res
+      .status(409)
+      .json({ message: "A unique constraint was violated." });
   }
 
   if (env.nodeEnv !== "production") {
